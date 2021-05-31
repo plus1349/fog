@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 from os import environ
 from sys import argv
 
@@ -15,5 +17,5 @@ def main():
     execute_from_command_line(argv)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

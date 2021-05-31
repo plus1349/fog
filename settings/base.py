@@ -1,17 +1,16 @@
-from pathlib import Path, PosixPath
+from pathlib import Path, PosixPath, WindowsPath
 from sys import path
+from typing import Union
 
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _l
 
 
-ROOT_DIR: PosixPath = Path(__file__).resolve().parent.parent
+ROOT_DIR: Union[PosixPath, WindowsPath] = Path(__file__).resolve().parent.parent
 
 path.append(str(ROOT_DIR / "apps"))
 path.append(str(ROOT_DIR / "lib"))
 
 SECRET_KEY: str = "secret"
-
-DEBUG: bool = False
 
 ALLOWED_HOSTS: list = ["*"]
 
@@ -22,6 +21,8 @@ INSTALLED_APPS: list = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+
+    "users",
 ]
 
 MIDDLEWARE: list = [
@@ -37,6 +38,7 @@ MIDDLEWARE: list = [
 
 ROOT_URLCONF: str = "urls"
 
+Path(ROOT_DIR / "templates").mkdir(exist_ok=True)
 TEMPLATES: list = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -64,6 +66,8 @@ DATABASES: dict = {
     }
 }
 
+AUTH_USER_MODEL: str = "users.User"
+
 AUTH_PASSWORD_VALIDATORS: list = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -81,10 +85,11 @@ AUTH_PASSWORD_VALIDATORS: list = [
 
 LANGUAGE_CODE: str = "en-us"
 LANGUAGES: list = [
-    ("en", _("English")),
-    ("ru", _("Russian")),
+    ("en", _l("English")),
+    ("ru", _l("Russian")),
 ]
 
+Path(ROOT_DIR / "locale").mkdir(exist_ok=True)
 LOCALE_PATHS: list = [ROOT_DIR / "locale"]
 
 TIME_ZONE: str = "UTC"
@@ -96,11 +101,10 @@ USE_TZ: bool = True
 FIXTURE_DIRS: list = [ROOT_DIR / "fixtures"]
 
 Path(ROOT_DIR / "media").mkdir(exist_ok=True)
-MEDIA_ROOT: PosixPath = ROOT_DIR / "media"
+MEDIA_ROOT: Union[PosixPath, WindowsPath] = ROOT_DIR / "media"
 MEDIA_URL: str = "/media/"
 
 Path(ROOT_DIR / "static").mkdir(exist_ok=True)
-STATIC_ROOT: PosixPath = ROOT_DIR / "static"
 STATIC_URL: str = "/static/"
 
 Path(ROOT_DIR / "log" / "django" / "request").mkdir(exist_ok=True, parents=True)
@@ -161,10 +165,3 @@ LOGGING: dict = {
         },
     },
 }
-
-try:
-    from settings.dev import *
-except ImportError:
-    pass
-else:
-    del STATIC_ROOT
