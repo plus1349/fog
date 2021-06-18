@@ -1,12 +1,15 @@
 .idea/
 __pycache__/
 
-log/*
-media/*
+media/
+migrations/
+locale/
+log/
 
-dev.py
-dev.txt
+development.*
 
 *.log
+*.mo
+*.po
 *.pyc
 *.sqlite3
